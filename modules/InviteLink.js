@@ -1,5 +1,5 @@
-module.exports = (command, msg) => {
-  if (command === "invite") {
+module.exports = (msg, main_command, args) => {
+  if (main_command === "invite") {
     const permissions = process.env.DISCORD_PERMISSIONS;
     const client_id = process.env.DISCORD_CLIENT_ID;
     msg.reply(

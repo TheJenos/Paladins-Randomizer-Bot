@@ -1,5 +1,18 @@
 {
-    "maps":{
-        "Siege":[]
-    }
+  "maps": {
+    "Siege": [
+      "Frog Isle",
+      "Jaguar Falls",
+      "Serpent Beach",
+      "Fish Market",
+      "Timber Mill",
+      "Frozen Guard",
+      "Ice Mines",
+      "Stone Keep",
+      "Brightmarsh",
+      "Splitstone Quarry",
+      "Ascension Peak"
+    ]
+  },
+  "classes": ["Flank", "Damage", "Front Line", "Support"]
 }
