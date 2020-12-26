@@ -1,7 +1,6 @@
-module.exports = (discord) => {
-  discord.on("message", (msg) => {
-    if (msg.content === "ping") {
-      msg.reply("Pong!");
-    }
-  });
+module.exports = (command, msg) => {
+  const [main_command, ...args] = command.split(" ");
+  if (main_command == "assign") {
+    msg.reply("Commonad " + args.join(" "));
+  }
 };
