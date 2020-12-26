@@ -1,5 +1,4 @@
-import { Client } from "discord.js";
-
+const Discord = require("discord.js");
 require("dotenv").config();
 
 const client = new Client();
