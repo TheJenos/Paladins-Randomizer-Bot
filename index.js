@@ -1,16 +1,13 @@
-const Discord = require('discord.js');
-require('dotenv').config()
+import { Client } from "discord.js";
 
-const client = new Discord.Client();
+require("dotenv").config();
 
-client.on('ready', () => {
+const client = new Client();
+
+client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('Pong!');
-  }
-});
+require("./modules/TeamRandomizer")(client);
 
 client.login(process.env.DISCORD_TOKEN);
