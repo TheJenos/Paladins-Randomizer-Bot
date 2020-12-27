@@ -5,7 +5,7 @@ const emoji = require("../utils/emojiCharacters.js");
 const utils = require("../utils/Utils.js");
 
 module.exports = async (discord, msg, main_command, args) => {
-  if (main_command === "rndChamp") {
+  if (main_command === "rndchamp") {
     let author = msg.author;
     if (msg.mentions.members.size > 0) {
       author = msg.mentions.members.first();
@@ -85,6 +85,17 @@ module.exports = async (discord, msg, main_command, args) => {
 
     msg.channel.send(
       `<@${author.id}>, You have to play **${filterd_champions.champion}** as in your next game`
+    );
+  } else if (main_command === "rndmap") {
+    let author = msg.author;
+    if (msg.mentions.members.size > 0) {
+      author = msg.mentions.members.first();
+    }
+
+    const filterd_map = _.shuffle(paladins_data.maps).pop();
+
+    msg.channel.send(
+      `<@${author.id}>, You guys can try **${filterd_map.name}** for your next game`
     );
   }
 };
