@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 const emoji = require("../utils/emojiCharacters.js");
 const utils = require("../utils/Utils.js");
 var _ = require("lodash");
+const Table = require("easy-table");
+const discord_await_time = process.env.DISCORD_AWAIT_TIME;
 
 module.exports = async (discord, msg, main_command, args, database) => {
   if (main_command == "assign") {
@@ -57,8 +59,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
       };
 
       const collected = await bot_msg.awaitReactions(filter, {
-        max: 4,
-        time: 6000,
+        max: paladins_data.classes.length,
+        time: discord_await_time,
         errors: ["time"],
       });
 
@@ -136,16 +138,25 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     const shuffled_players = _.chunk(_.shuffle(players), player_count / 2);
 
-    const embed = new Discord.MessageEmbed()
-      .setColor(utils.getRandomColor())
-      .setTitle(`${map.name} (${player_count / 2} vs ${player_count / 2})`)
-      .setAuthor(discord.user.username, discord.user.avatarURL());
+    // const embed = new Discord.MessageEmbed()
+    //   .setColor(utils.getRandomColor())
+    //   .setTitle(`${map.name} (${player_count / 2} vs ${player_count / 2})`)
+    //   .setAuthor(discord.user.username, discord.user.avatarURL());
+
+    let description = `${map.name} (${player_count / 2} vs ${
+      player_count / 2
+    })\n\n`;
 
     for (const index in shuffled_players) {
-      embed.addField(
-        `Team ${index - -1}`,
-        index == 0 ? "Left side" : "Right side"
-      );
+      var t = new Table();
+
+      // embed.addField(
+      //   `Team ${index - -1}`,
+      //   index == 0 ? "Left side" : "Right side"
+      // );
+
+      description += `Team ${index - -1}` + "\n";
+
       for (const element of shuffled_players[index]) {
         if (element.bot == false) {
           let datasnap = (
@@ -164,17 +175,59 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
           const shuffled_champions = _.shuffle(filterd_champions).pop();
 
-          embed.addField(
-            `${element.username} [${datasnap.join(", ")}]`,
-            `${shuffled_champions.champion}`,
-            true
+          // embed.addField(
+          //   `${element.username} [${datasnap
+          //     .map((x) =>
+          //       x
+          //         .split(" ")
+          //         .map((y) => emoji[y.substring(0, 1).toLowerCase()])
+          //         .join(" ")
+          //     )
+          //     .join(", ")}]`,
+          //   `${shuffled_champions.champion}`,
+          //   true
+          // );
+
+          t.cell("Player", element.username);
+          t.cell(
+            "Classes",
+            datasnap
+              .map((x) =>
+                x
+                  .split(" ")
+                  .map((y) => y.substring(0, 1))
+                  .join(" ")
+              )
+              .join(", ")
           );
+          t.cell("Champion", shuffled_champions.champion);
+          t.newRow();
         } else {
-          embed.addField(`Bot`, `Randomly pick by game`, true);
+          // embed.addField(`Bot`, `Randomly pick by game`, true);
+
+          t.cell("Player", "Bot");
+          t.cell(
+            "Classes",
+            paladins_data.classes
+              .map((x) =>
+                x
+                  .split(" ")
+                  .map((y) => y.substring(0, 1))
+                  .join(" ")
+              )
+              .join(", ")
+          );
+          t.cell("Champion", "Randomly pick by game");
+          t.newRow();
         }
       }
+      description += t.toString() + "\n";
     }
 
-    const bot_msg = await msg.channel.send(embed);
+    // embed.setDescription("```" + description + "```");
+
+    msg.channel.send("```" + description + "```");
+
+    // const bot_msg = await msg.channel.send(embed);
   }
 };
