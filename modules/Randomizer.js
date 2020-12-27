@@ -170,7 +170,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
             true
           );
         } else {
-          embed.addField(`Bot`, `Random by paladins`, true);
+          embed.addField(`Bot`, `Randomly pick by game`, true);
         }
       }
     }
