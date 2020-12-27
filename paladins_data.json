@@ -1,18 +1,206 @@
 {
-  "maps": {
-    "Siege": [
-      "Frog Isle",
-      "Jaguar Falls",
-      "Serpent Beach",
-      "Fish Market",
-      "Timber Mill",
-      "Frozen Guard",
-      "Ice Mines",
-      "Stone Keep",
-      "Brightmarsh",
-      "Splitstone Quarry",
-      "Ascension Peak"
-    ]
-  },
+  "maps": [
+    { "name": "Frog Isle", "type": "siege" },
+    { "name": "Jaguar Falls", "type": "siege" },
+    { "name": "Serpent Beach", "type": "siege" },
+    { "name": "Fish Market", "type": "siege" },
+    { "name": "Timber Mill", "type": "siege" },
+    { "name": "Frozen Guard", "type": "siege" },
+    { "name": "Ice Mines", "type": "siege" },
+    { "name": "Stone Keep", "type": "siege" },
+    { "name": "Brightmarsh", "type": "siege" },
+    { "name": "Splitstone Quarry", "type": "siege" },
+    { "name": "Ascension Peak", "type": "siege" }
+  ],
+  "champions": [
+    {
+      "champion": "Androxus",
+      "class": "Flank"
+    },
+    {
+      "champion": "Ash",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Atlas",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Barik",
+      "class": "Front Line"
+    },
+    {
+      "champion": "BombKing",
+      "class": "Damage"
+    },
+    {
+      "champion": "Buck",
+      "class": "Flank"
+    },
+    {
+      "champion": "Cassie",
+      "class": "Damage"
+    },
+    {
+      "champion": "Corvus",
+      "class": "Support"
+    },
+    {
+      "champion": "Dredge",
+      "class": "Damage"
+    },
+    {
+      "champion": "Drogoz",
+      "class": "Damage"
+    },
+    {
+      "champion": "Evie",
+      "class": "Flank"
+    },
+    {
+      "champion": "Fernando",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Furia",
+      "class": "Support"
+    },
+    {
+      "champion": "Grohk",
+      "class": "Support"
+    },
+    {
+      "champion": "Grover",
+      "class": "Support"
+    },
+    {
+      "champion": "Imani",
+      "class": "Damage"
+    },
+    {
+      "champion": "Inara",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Io",
+      "class": "Support"
+    },
+    {
+      "champion": "Jenos",
+      "class": "Support"
+    },
+    {
+      "champion": "Khan",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Kinessa",
+      "class": "Damage"
+    },
+    {
+      "champion": "Koga",
+      "class": "Flank"
+    },
+    {
+      "champion": "Lex",
+      "class": "Flank"
+    },
+    {
+      "champion": "Lian",
+      "class": "Damage"
+    },
+    {
+      "champion": "Maeve",
+      "class": "Flank"
+    },
+    {
+      "champion": "Makoa",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Mal'Damba",
+      "class": "Support"
+    },
+    {
+      "champion": "Moji",
+      "class": "Flank"
+    },
+    {
+      "champion": "Pip",
+      "class": "Support"
+    },
+    {
+      "champion": "Raum",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Ruckus",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Seris",
+      "class": "Support"
+    },
+    {
+      "champion": "ShaLin",
+      "class": "Damage"
+    },
+    {
+      "champion": "Skye",
+      "class": "Flank"
+    },
+    {
+      "champion": "Strix",
+      "class": "Damage"
+    },
+    {
+      "champion": "Talus",
+      "class": "Flank"
+    },
+    {
+      "champion": "Terminus",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Tiberius",
+      "class": "Damage"
+    },
+    {
+      "champion": "Torvald",
+      "class": "Front Line"
+    },
+    {
+      "champion": "Tyra",
+      "class": "Damage"
+    },
+    {
+      "champion": "Viktor",
+      "class": "Damage"
+    },
+    {
+      "champion": "Vivian",
+      "class": "Damage"
+    },
+    {
+      "champion": "Vora",
+      "class": "Flank"
+    },
+    {
+      "champion": "Willo",
+      "class": "Damage"
+    },
+    {
+      "champion": "Ying",
+      "class": "Support"
+    },
+    {
+      "champion": "Zhin",
+      "class": "Flank"
+    },
+    {
+      "champion": "",
+      "class": ""
+    }
+  ],
   "classes": ["Flank", "Damage", "Front Line", "Support"]
 }

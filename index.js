@@ -11,12 +11,19 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on("message", (msg) => {
+client.on("message", async (msg) => {
   if (msg.content.startsWith(bot_starter)) {
     const filterd_msg = msg.content.substr(bot_starter.length);
     const [main_command, ...args] = filterd_msg.split(" ");
-    require("./modules/InviteLink")(msg, main_command, args);
-    require("./modules/Randomizer")(msg, main_command, args, database);
+    require("./modules/Utils")(client, msg, main_command, args);
+    await require("./modules/Basic")(client, msg, main_command, args);
+    await require("./modules/Randomizer")(
+      client,
+      msg,
+      main_command,
+      args,
+      database
+    );
   }
 });
 
