@@ -10,6 +10,20 @@ const express = require("express");
 var http = require("http");
 const app = express();
 
+if (process.env.FIREBASE) {
+  firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_ID,
+    storageBucket: process.env.FIREBASE_BUCK,
+    messagingSenderId: process.env.FIREBASE_MSG_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MES_ID,
+  };
+} else {
+  firebaseConfig = require("./firebaseConfig.json");
+}
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
