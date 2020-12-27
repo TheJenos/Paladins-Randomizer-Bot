@@ -9,7 +9,7 @@ const app = express();
 
 let firebaseConfig = null;
 
-if (process.env.FIREBASE == true) {
+if (process.env.FIREBASE) {
   firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
