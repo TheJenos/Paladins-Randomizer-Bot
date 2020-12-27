@@ -14,7 +14,10 @@ module.exports = (discord, msg, main_command, args) => {
         "rndChamp -> Give a random Champion\n\n" +
         "rndMap -> Give a random Map\n\n" +
         "assign -> Assign to classes that you like to play\n\n" +
-        "randomize -> Randomize the map and champions of coustom matches\n\n\n" +
+        "randomize -> Randomize the map(Siege) and champions of coustom matches\n" +
+        "randomize-map -> Randomize the map(Map type Selector) and champions of coustom matches\n" +
+        "randomize-champ -> Randomize the map(Siege) and champions(Class Selector) of coustom matches\n" +
+        "randomize-champ-map -> Randomize the map(Map type Selector) and champions(Class Selector) of coustom matches\n\n\n" +
         "```"
     );
   }

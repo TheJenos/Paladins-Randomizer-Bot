@@ -12,74 +12,13 @@ module.exports = async (discord, msg, main_command, args, database) => {
     if (msg.mentions.members.size > 0) {
       author = msg.mentions.members.first();
     }
-    const embed = new Discord.MessageEmbed()
-      .setColor(utils.getRandomColor())
-      .setAuthor(author.username, author.avatarURL());
 
-    let discription = "Please select classes that you like to play\n\n";
-
-    const numbers = [
-      "one",
-      "two",
-      "three",
-      "four",
-      "five",
-      "six",
-      "seven",
-      "eight",
-      "nine",
-      "ten",
-    ];
-
-    paladins_data.classes.forEach((class_name) => {
-      discription += `:${numbers.shift()}: ${class_name}\n\n`;
-    });
-
-    discription += "You can start react after appiring numbers";
-
-    embed.setDescription(discription);
-
-    const bot_msg = await msg.channel.send(embed);
-
-    const emoji_must = [];
-
-    for (let index = 1; index <= paladins_data.classes.length; index++) {
-      emoji_must.push(emoji[index]);
-      await bot_msg.react(emoji[index]);
-    }
-
-    let result = null;
-
-    try {
-      const filter = (reaction, user) => {
-        return (
-          emoji_must.includes(reaction.emoji.name) &&
-          (user.id === msg.author.id || user.id === author.id)
-        );
-      };
-
-      const collected = await bot_msg.awaitReactions(filter, {
-        max: paladins_data.classes.length,
-        time: discord_await_time,
-        errors: ["time"],
-      });
-
-      result = collected;
-    } catch (error) {
-      if (error.size < 1) {
-        await bot_msg.delete();
-        return;
-      }
-
-      result = error;
-    }
-
-    await bot_msg.delete();
-
-    const class_list = Array.from(result.keys())
-      .map((x) => utils.getKeyByValue(emoji, x))
-      .filter((x) => x != undefined)
-      .map((x) => paladins_data.classes[x - 1]);
+    const class_list = await utils.multiSelector(
+      msg,
+      msg.author,
+      paladins_data.classes,
+      "Please select classes that you like to play"
+    );
 
     database.ref("assigned_users").child(author.id).set(class_list);
 
@@ -88,7 +27,12 @@ module.exports = async (discord, msg, main_command, args, database) => {
         "**, **"
       )}**`
     );
-  } else if (main_command == "randomize") {
+  } else if (
+    main_command == "randomize-map" ||
+    main_command == "randomize" ||
+    main_command == "randomize-champ-map" ||
+    main_command == "randomize-champ"
+  ) {
     let voice_channels = Array.from(msg.guild.channels.cache.values()).filter(
       (x) => x.type == "voice"
     );
@@ -131,84 +75,126 @@ module.exports = async (discord, msg, main_command, args, database) => {
       players.push({ username: "bot", bot: true });
     }
 
-    const map =
-      paladins_data.maps[Math.floor(Math.random() * paladins_data.maps.length)];
+    let map = null;
+
+    if (main_command == "randomize" || main_command == "randomize-champ") {
+      map = _.shuffle(
+        paladins_data.maps.filter((x) => x.type == "Siege")
+      ).pop();
+    } else {
+      const map_types = _.uniqBy(paladins_data.maps, "type").map((x) => x.type);
+
+      const type_list = await utils.multiSelector(
+        msg,
+        msg.author,
+        map_types,
+        "Please select map type that you like to play"
+      );
+
+      if (type_list == null) {
+        return;
+      }
+
+      map = _.shuffle(
+        paladins_data.maps.filter((x) => type_list.includes(x.type))
+      ).pop();
+    }
 
     const player_count = players.length;
 
     const shuffled_players = _.chunk(_.shuffle(players), player_count / 2);
 
-    // const embed = new Discord.MessageEmbed()
-    //   .setColor(utils.getRandomColor())
-    //   .setTitle(`${map.name} (${player_count / 2} vs ${player_count / 2})`)
-    //   .setAuthor(discord.user.username, discord.user.avatarURL());
-
     let description = `${map.name} (${player_count / 2} vs ${
       player_count / 2
     })\n\n`;
 
+    let filter_class = paladins_data.classes;
+
+    if (
+      main_command == "randomize-champ" ||
+      main_command == "randomize-champ-map"
+    ) {
+      filter_class = await utils.multiSelector(
+        msg,
+        msg.author,
+        paladins_data.classes,
+        "Please select class that you guys like to play"
+      );
+
+      if (filter_class == null) {
+        return;
+      }
+    }
+
     for (const index in shuffled_players) {
       var t = new Table();
 
-      // embed.addField(
-      //   `Team ${index - -1}`,
-      //   index == 0 ? "Left side" : "Right side"
-      // );
-
       description += `Team ${index - -1}` + "\n";
+
+      const champs = _.shuffle(
+        paladins_data.champions.filter((x) => filter_class.includes(x.class))
+      );
 
       for (const element of shuffled_players[index]) {
         if (element.bot == false) {
-          let datasnap = (
-            await database.ref("assigned_users").child(element.id).once("value")
-          ).val();
+          t.cell("Player", element.username);
 
-          let filterd_champions = paladins_data.champions;
+          if (main_command == "randomize" || main_command == "randomize-map") {
+            let datasnap = (
+              await database
+                .ref("assigned_users")
+                .child(element.id)
+                .once("value")
+            ).val();
 
-          if (datasnap != null) {
-            filterd_champions = filterd_champions.filter((x) =>
-              datasnap.includes(x.class)
+            let filterd_champions = paladins_data.champions;
+
+            if (datasnap != null) {
+              filterd_champions = filterd_champions.filter((x) =>
+                datasnap.includes(x.class)
+              );
+            } else {
+              datasnap = paladins_data.classes;
+            }
+
+            t.cell(
+              "Classes",
+              datasnap
+                .map((x) =>
+                  x
+                    .split(" ")
+                    .map((y) => y.substring(0, 1))
+                    .join(" ")
+                )
+                .join(", ")
             );
+            const shuffled_champions = _.shuffle(filterd_champions).pop();
+
+            t.cell("Champion", shuffled_champions.champion);
           } else {
-            datasnap = paladins_data.classes;
+            t.cell(
+              "Classes",
+              filter_class
+                .map((x) =>
+                  x
+                    .split(" ")
+                    .map((y) => y.substring(0, 1))
+                    .join(" ")
+                )
+                .join(", ")
+            );
+
+            const shuffled_champions = champs.pop();
+
+            t.cell("Champion", shuffled_champions.champion);
           }
 
-          const shuffled_champions = _.shuffle(filterd_champions).pop();
-
-          // embed.addField(
-          //   `${element.username} [${datasnap
-          //     .map((x) =>
-          //       x
-          //         .split(" ")
-          //         .map((y) => emoji[y.substring(0, 1).toLowerCase()])
-          //         .join(" ")
-          //     )
-          //     .join(", ")}]`,
-          //   `${shuffled_champions.champion}`,
-          //   true
-          // );
-
-          t.cell("Player", element.username);
-          t.cell(
-            "Classes",
-            datasnap
-              .map((x) =>
-                x
-                  .split(" ")
-                  .map((y) => y.substring(0, 1))
-                  .join(" ")
-              )
-              .join(", ")
-          );
-          t.cell("Champion", shuffled_champions.champion);
           t.newRow();
         } else {
-          // embed.addField(`Bot`, `Randomly pick by game`, true);
-
           t.cell("Player", "Bot");
           t.cell(
             "Classes",
-            paladins_data.classes
+            filter_class
               .map((x) =>
                 x
                   .split(" ")
@@ -224,10 +210,6 @@ module.exports = async (discord, msg, main_command, args, database) => {
       description += t.toString() + "\n";
     }
 
-    // embed.setDescription("```" + description + "```");
-
     msg.channel.send("```" + description + "```");
-
-    // const bot_msg = await msg.channel.send(embed);
   }
 };

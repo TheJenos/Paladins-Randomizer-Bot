@@ -1,16 +1,34 @@
 {
   "maps": [
-    { "name": "Frog Isle", "type": "siege" },
-    { "name": "Jaguar Falls", "type": "siege" },
-    { "name": "Serpent Beach", "type": "siege" },
-    { "name": "Fish Market", "type": "siege" },
-    { "name": "Timber Mill", "type": "siege" },
-    { "name": "Frozen Guard", "type": "siege" },
-    { "name": "Ice Mines", "type": "siege" },
-    { "name": "Stone Keep", "type": "siege" },
-    { "name": "Brightmarsh", "type": "siege" },
-    { "name": "Splitstone Quarry", "type": "siege" },
-    { "name": "Ascension Peak", "type": "siege" }
+    { "name": "Frog Isle", "type": "Siege" },
+    { "name": "Jaguar Falls", "type": "Siege" },
+    { "name": "Serpent Beach", "type": "Siege" },
+    { "name": "Fish Market", "type": "Siege" },
+    { "name": "Timber Mill", "type": "Siege" },
+    { "name": "Frozen Guard", "type": "Siege" },
+    { "name": "Ice Mines", "type": "Siege" },
+    { "name": "Stone Keep", "type": "Siege" },
+    { "name": "Brightmarsh", "type": "Siege" },
+    { "name": "Splitstone Quarry", "type": "Siege" },
+    { "name": "Ascension Peak", "type": "Siege" },
+    { "name": "Warder's Gate", "type": "Siege" },
+    { "name": "Shattered Desert", "type": "Siege" },
+    { "name": "Bazaar", "type": "Siege" },
+
+    { "name": "Primal Court", "type": "Onslaught" },
+    { "name": "Foreman's Rise", "type": "Onslaught" },
+    { "name": "Magistrate's Archives", "type": "Onslaught" },
+    { "name": "Marauder's Port", "type": "Onslaught" },
+
+    { "name": "Snowfall Junction", "type": "King of the Hill" },
+    { "name": "Trade District", "type": "King of the Hill" },
+    { "name": "Magistrate's Archives", "type": "King of the Hill" },
+    { "name": "Marauder's Port", "type": "King of the Hill" },
+
+    { "name": "Snowfall Junction", "type": "Team Deathmatch" },
+    { "name": "Trade District", "type": "Team Deathmatch" },
+    { "name": "Abyss", "type": "Team Deathmatch" },
+    { "name": "Dragon_Arena", "type": "Team Deathmatch" }
   ],
   "champions": [
     {
