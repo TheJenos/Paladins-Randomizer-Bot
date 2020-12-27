@@ -1,16 +1,15 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 var firebase = require("firebase");
-const firebaseConfig = require("./firebaseConfig.json");
 const bot_starter = process.env.BOT_STARTER;
-const store_cfg = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
 const client = new Discord.Client();
 const express = require("express");
 var http = require("http");
 const app = express();
 
-if (process.env.FIREBASE) {
+let firebaseConfig = null;
+
+if (process.env.FIREBASE == true) {
   firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -23,6 +22,9 @@ if (process.env.FIREBASE) {
 } else {
   firebaseConfig = require("./firebaseConfig.json");
 }
+
+const store_cfg = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
