@@ -2,6 +2,27 @@ const Discord = require("discord.js");
 const discord_await_time = process.env.DISCORD_AWAIT_TIME;
 const emoji = require("../utils/emojiCharacters.js");
 
+var http = require("https"),
+  Stream = require("stream").Transform,
+  fs = require("fs");
+
+module.exports.download = (uri, filename, callback) => {
+  http
+    .request(uri, function (response) {
+      var data = new Stream();
+
+      response.on("data", function (chunk) {
+        data.push(chunk);
+      });
+
+      response.on("end", function () {
+        fs.writeFileSync(filename, data.read());
+        callback();
+      });
+    })
+    .end();
+};
+
 module.exports.getKeyByValue = (object, value) => {
   return Object.keys(object).find((key) => object[key] === value);
 };

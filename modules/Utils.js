@@ -23,29 +23,30 @@ module.exports = (discord, msg, main_command, args) => {
         "```"
     );
   } else if (main_command === "instractions") {
+    const starter = process.env.BOT_STARTER;
     msg.reply(`
 **Let's start with the basics**
 
-\`\`??assign\`\` will only effects when someone use \`\`??randomize\`\` or \`\`??randomize-map\`\`
+\`\`${starter}assign\`\` will only effects when someone use \`\`${starter}randomize\`\` or \`\`${starter}randomize-map\`\`
 
-\`\`??rndchamp\`\` it's a common thing it will ask what classes that you like then give a random champ
+\`\`${starter}rndchamp\`\` it's a common thing it will ask what classes that you like then give a random champ
 
-\`\`??rndmap\`\` Same as the \`\`??rndchamp\`\` but maps
+\`\`${starter}rndmap\`\` Same as the \`\`${starter}rndchamp\`\` but maps
 
 **When we come to the randomize command.. there are 4 types randomize commands**
 
-\`\`??randomize\`\` get players that are in your voice chat and randomize them divide them in to 2 team.. if player count is a odd number it will add a bot
+\`\`${starter}randomize\`\` get players that are in your voice chat and randomize them divide them in to 2 team.. if player count is a odd number it will add a bot
 
-\`\`??randomize-team\`\` it will create a team from your voice channel
+\`\`${starter}randomize-team\`\` it will create a team from your voice channel
 
-\`\`??randomize-team-champ\`\` it will ask which type of class that you like to play and it will create a team from your voice channel \`\`??randomize\`\`
+\`\`${starter}randomize-team-champ\`\` it will ask which type of class that you like to play and it will create a team from your voice channel \`\`${starter}randomize\`\`
 
-\`\`??randomize-map\`\` it will ask which type of map that you like to play and works like normal \`\`??randomize\`\`
+\`\`${starter}randomize-map\`\` it will ask which type of map that you like to play and works like normal \`\`${starter}randomize\`\`
 
-\`\`??randomize-champ\`\` it will ask which type of class that you like to play and works like normal \`\`??randomize\`\`
+\`\`${starter}randomize-champ\`\` it will ask which type of class that you like to play and works like normal \`\`${starter}randomize\`\`
 
-\`\`??randomize-champ\`\` it will ask which type of map and the clas that you like to play and works like normal \`\`??randomize\`\`
+\`\`${starter}randomize-champ\`\` it will ask which type of map and the clas that you like to play and works like normal \`\`${starter}randomize\`\`
 
-If have a **AFK person** on our voice.. So you can use \`\`??randomize <@metion the persons>\`\` so it will ignore them`);
+If have a **AFK person** on our voice.. So you can use \`\`${starter}randomize <@metion the persons>\`\` so it will ignore them`);
   }
 };
