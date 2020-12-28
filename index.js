@@ -33,7 +33,7 @@ const database = firebase.database();
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity(`to ${bot_starter}help`, { type: "LISTENING" });
+  client.user.setActivity(`${bot_starter}help`, { type: "LISTENING" });
   updateSession();
 });
 
