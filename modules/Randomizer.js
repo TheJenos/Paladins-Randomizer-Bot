@@ -259,12 +259,6 @@ module.exports = async (discord, msg, main_command, args, database) => {
       return;
     }
 
-    var t = new Table();
-
-    const champs = _.shuffle(
-      paladins_data.champions.filter((x) => filter_class.includes(x.class))
-    );
-
     if (main_command == "randomize-team-champ") {
       filter_class = await utils.multiSelector(
         msg,
@@ -277,6 +271,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
         return;
       }
     }
+
+    var t = new Table();
 
     const champs = _.shuffle(
       paladins_data.champions.filter((x) => filter_class.includes(x.class))
