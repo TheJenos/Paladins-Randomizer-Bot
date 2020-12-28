@@ -155,6 +155,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
               filterd_champions = champs_full.filter((x) =>
                 datasnap.includes(x.class)
               );
+            } else {
+              datasnap = filterd_champions;
             }
 
             t.cell(
