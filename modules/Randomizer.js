@@ -149,14 +149,14 @@ module.exports = async (discord, msg, main_command, args, database) => {
                 .once("value")
             ).val();
 
-            let filterd_champions = paladins_data.champions;
+            let filterd_champions = champs_full;
 
             if (datasnap != null) {
               filterd_champions = champs_full.filter((x) =>
                 datasnap.includes(x.class)
               );
             } else {
-              datasnap = filterd_champions;
+              datasnap = paladins_data.classes;
             }
 
             t.cell(
@@ -170,7 +170,11 @@ module.exports = async (discord, msg, main_command, args, database) => {
                 )
                 .join(", ")
             );
-            const shuffled_champions = _.shuffle(filterd_champions).pop();
+
+            const temp_champ_list = _.shuffle(filterd_champions);
+            const shuffled_champions = temp_champ_list.pop();
+
+            champs_full = temp_champ_list;
 
             t.cell("Champion", shuffled_champions.champion);
           } else {
@@ -213,5 +217,128 @@ module.exports = async (discord, msg, main_command, args, database) => {
     }
 
     msg.channel.send("```" + description + "```");
+  } else if (
+    main_command == "randomize-team" ||
+    main_command == "randomize-team-champ"
+  ) {
+    let voice_channels = Array.from(msg.guild.channels.cache.values()).filter(
+      (x) => x.type == "voice"
+    );
+
+    let sellected_voice_channel = undefined;
+
+    if (args.length > 0) {
+      sellected_voice_channel = voice_channels.find((x) => x.name == args[0]);
+    }
+
+    if (sellected_voice_channel == undefined) {
+      sellected_voice_channel = voice_channels.find(
+        (x) =>
+          Array.from(x.members.keys()).find((user) => user == msg.author.id) !=
+          undefined
+      );
+    }
+
+    if (sellected_voice_channel == undefined) {
+      msg.reply("Sorry i connot find your voice channel");
+      return;
+    }
+
+    let players = Array.from(sellected_voice_channel.members.values())
+      .map((x) => x.user)
+      .filter((x) => x.bot == false);
+
+    if (msg.mentions.members.size > 0) {
+      players = players.filter(
+        (x) => !Array.from(msg.mentions.members.keys()).includes(x.id)
+      );
+    }
+
+    if (players.length < 1) {
+      msg.reply("Sorry there is not enough players to play");
+      return;
+    }
+
+    var t = new Table();
+
+    const champs = _.shuffle(
+      paladins_data.champions.filter((x) => filter_class.includes(x.class))
+    );
+
+    if (main_command == "randomize-team-champ") {
+      filter_class = await utils.multiSelector(
+        msg,
+        msg.author,
+        paladins_data.classes,
+        "Please select class that you guys like to play"
+      );
+
+      if (filter_class == null) {
+        return;
+      }
+    }
+
+    const champs = _.shuffle(
+      paladins_data.champions.filter((x) => filter_class.includes(x.class))
+    );
+
+    const champs_full = _.shuffle(paladins_data.champions);
+
+    for (const element of players) {
+      t.cell("Player", element.username);
+
+      if (main_command == "randomize-team") {
+        let datasnap = (
+          await database.ref("assigned_users").child(element.id).once("value")
+        ).val();
+
+        let filterd_champions = champs_full;
+
+        if (datasnap != null) {
+          filterd_champions = champs_full.filter((x) =>
+            datasnap.includes(x.class)
+          );
+        } else {
+          datasnap = paladins_data.classes;
+        }
+
+        t.cell(
+          "Classes",
+          datasnap
+            .map((x) =>
+              x
+                .split(" ")
+                .map((y) => y.substring(0, 1))
+                .join(" ")
+            )
+            .join(", ")
+        );
+
+        const temp_champ_list = _.shuffle(filterd_champions);
+        const shuffled_champions = temp_champ_list.pop();
+
+        champs_full = temp_champ_list;
+
+        t.cell("Champion", shuffled_champions.champion);
+      } else {
+        t.cell(
+          "Classes",
+          filter_class
+            .map((x) =>
+              x
+                .split(" ")
+                .map((y) => y.substring(0, 1))
+                .join(" ")
+            )
+            .join(", ")
+        );
+
+        const shuffled_champions = champs.pop();
+
+        t.cell("Champion", shuffled_champions.champion);
+      }
+      t.newRow();
+    }
+    msg.channel.send("```" + t.toString() + "```");
   }
 };

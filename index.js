@@ -84,3 +84,15 @@ app.listen(process.env.PORT || 8080, () => {
   client.login(process.env.DISCORD_TOKEN);
   updateSession();
 });
+
+process.on("uncaughtException", function (error) {
+  database
+    .ref("error_logs")
+    .push()
+    .set({
+      error: JSON.parse(
+        JSON.stringify(error, Object.getOwnPropertyNames(error))
+      ),
+      time: new Date().getTime(),
+    });
+});
