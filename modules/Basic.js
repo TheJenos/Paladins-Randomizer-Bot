@@ -19,6 +19,11 @@ module.exports = async (discord, msg, main_command, args) => {
       "Please select classes that you like to play"
     );
 
+    if (class_list == null) {
+      msg.reply("You have to pick a class to continue");
+      return;
+    }
+
     const filterd_champions = _.shuffle(
       paladins_data.champions.filter((x) => class_list.includes(x.class))
     ).pop();
@@ -35,6 +40,11 @@ module.exports = async (discord, msg, main_command, args) => {
       map_types,
       "Please select map type that you like to play"
     );
+
+    if (type_list == null) {
+      msg.reply("You have to pick a map type to continue");
+      return;
+    }
 
     const filterd_map = _.shuffle(
       paladins_data.maps.filter((x) => type_list.includes(x.type))

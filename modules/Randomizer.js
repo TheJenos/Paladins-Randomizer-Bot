@@ -20,6 +20,11 @@ module.exports = async (discord, msg, main_command, args, database) => {
       "Please select classes that you like to play"
     );
 
+    if (class_list == null) {
+      msg.reply("You have to pick a class to continue");
+      return;
+    }
+
     database.ref("assigned_users").child(author.id).set(class_list);
 
     msg.channel.send(
@@ -33,23 +38,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
     main_command == "randomize-champ-map" ||
     main_command == "randomize-champ"
   ) {
-    let voice_channels = Array.from(msg.guild.channels.cache.values()).filter(
-      (x) => x.type == "voice"
-    );
-
-    let sellected_voice_channel = undefined;
-
-    if (args.length > 0) {
-      sellected_voice_channel = voice_channels.find((x) => x.name == args[0]);
-    }
-
-    if (sellected_voice_channel == undefined) {
-      sellected_voice_channel = voice_channels.find(
-        (x) =>
-          Array.from(x.members.keys()).find((user) => user == msg.author.id) !=
-          undefined
-      );
-    }
+    let sellected_voice_channel = msg.member.voice.channel;
 
     if (sellected_voice_channel == undefined) {
       msg.reply("Sorry i connot find your voice channel");
@@ -92,6 +81,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
       );
 
       if (type_list == null) {
+        msg.reply("You have to pick a map type to continue");
         return;
       }
 
@@ -122,6 +112,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
       );
 
       if (filter_class == null) {
+        msg.reply("You have to pick a class to continue");
         return;
       }
     }
@@ -221,23 +212,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
     main_command == "randomize-team" ||
     main_command == "randomize-team-champ"
   ) {
-    let voice_channels = Array.from(msg.guild.channels.cache.values()).filter(
-      (x) => x.type == "voice"
-    );
-
-    let sellected_voice_channel = undefined;
-
-    if (args.length > 0) {
-      sellected_voice_channel = voice_channels.find((x) => x.name == args[0]);
-    }
-
-    if (sellected_voice_channel == undefined) {
-      sellected_voice_channel = voice_channels.find(
-        (x) =>
-          Array.from(x.members.keys()).find((user) => user == msg.author.id) !=
-          undefined
-      );
-    }
+    let sellected_voice_channel = msg.member.voice.channel;
 
     if (sellected_voice_channel == undefined) {
       msg.reply("Sorry i connot find your voice channel");
@@ -270,6 +245,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
       );
 
       if (filter_class == null) {
+        msg.reply("You have to pick a class to continue");
         return;
       }
     }

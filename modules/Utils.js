@@ -5,12 +5,12 @@ module.exports = (discord, msg, main_command, args) => {
     msg.reply(
       `Here is your invite link : https://discord.com/oauth2/authorize?client_id=${client_id}&permissions=${permissions}&scope=bot`
     );
-  }
-  if (main_command === "help") {
+  } else if (main_command === "help") {
     msg.reply(
       "```" +
         "Commands of Paladins Team Randomizer\n\n" +
         "invite -> Give a invite link for the bot\n\n" +
+        "instractions -> help you to understard the bot\n\n" +
         "rndChamp -> Give a random Champion\n\n" +
         "rndMap -> Give a random Map\n\n" +
         "assign -> Assign to classes that you like to play\n\n" +
@@ -22,5 +22,30 @@ module.exports = (discord, msg, main_command, args) => {
         "randomize-champ-map -> Randomize the map(Map type Selector) and champions(Class Selector) of coustom matches\n\n\n" +
         "```"
     );
+  } else if (main_command === "instractions") {
+    msg.reply(`
+**Let's start with the basics**
+
+\`\`??assign\`\` will only effects when someone use \`\`??randomize\`\` or \`\`??randomize-map\`\`
+
+\`\`??rndchamp\`\` it's a common thing it will ask what classes that you like then give a random champ
+
+\`\`??rndmap\`\` Same as the \`\`??rndchamp\`\` but maps
+
+**When we come to the randomize command.. there are 4 types randomize commands**
+
+\`\`??randomize\`\` get players that are in your voice chat and randomize them divide them in to 2 team.. if player count is a odd number it will add a bot
+
+\`\`??randomize-team\`\` it will create a team from your voice channel
+
+\`\`??randomize-team-champ\`\` it will ask which type of class that you like to play and it will create a team from your voice channel \`\`??randomize\`\`
+
+\`\`??randomize-map\`\` it will ask which type of map that you like to play and works like normal \`\`??randomize\`\`
+
+\`\`??randomize-champ\`\` it will ask which type of class that you like to play and works like normal \`\`??randomize\`\`
+
+\`\`??randomize-champ\`\` it will ask which type of map and the clas that you like to play and works like normal \`\`??randomize\`\`
+
+If have a **AFK person** on our voice.. So you can use \`\`??randomize <@metion the persons>\`\` so it will ignore them`);
   }
 };
