@@ -135,7 +135,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
         paladins_data.champions.filter((x) => filter_class.includes(x.class))
       );
 
-      const champs_full = _.shuffle(paladins_data.champions);
+      let champs_full = _.shuffle(paladins_data.champions);
 
       for (const element of shuffled_players[index]) {
         if (element.bot == false) {
@@ -278,7 +278,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
       paladins_data.champions.filter((x) => filter_class.includes(x.class))
     );
 
-    const champs_full = _.shuffle(paladins_data.champions);
+    let champs_full = _.shuffle(paladins_data.champions);
 
     for (const element of players) {
       t.cell("Player", element.username);
