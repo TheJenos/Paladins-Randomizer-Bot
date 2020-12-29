@@ -276,16 +276,6 @@ module.exports = async (discord, msg, main_command, args, database) => {
           datasnap = paladins_data.classes;
         }
 
-        database
-          .ref("log_info")
-          .push()
-          .set({
-            error: JSON.parse(
-              JSON.stringify(datasnap)
-            ),
-            time: new Date().getTime(),
-          });
-
         t.cell(
           "Classes",
           datasnap
@@ -302,6 +292,18 @@ module.exports = async (discord, msg, main_command, args, database) => {
         const shuffled_champions = temp_champ_list.pop();
 
         champs_full = temp_champ_list;
+
+        if (shuffled_champions == null)
+          database
+            .ref("log_info")
+            .push()
+            .set({
+              info: {
+                champ: shuffled_champions,
+                champs_full,
+              },
+              time: new Date().getTime(),
+            });
 
         t.cell("Champion", shuffled_champions.champion);
       } else {
