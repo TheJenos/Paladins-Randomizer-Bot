@@ -293,19 +293,6 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
         champs_full = champs_full.filter(x=> x.champion != shuffled_champions.champion);
 
-        if (shuffled_champions == null)
-          database
-            .ref("log_info")
-            .push()
-            .set({
-              info: {
-                filterd_champions: filterd_champions,
-                player: element,
-                champs_full,
-              },
-              time: new Date().getTime(),
-            });
-
         t.cell("Champion", shuffled_champions.champion);
       } else {
         t.cell(
