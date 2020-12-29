@@ -234,6 +234,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
       return;
     }
 
+    console.log(players);
+
     let filter_class = paladins_data.champions;
 
     if (main_command == "randomize-team-champ") {
