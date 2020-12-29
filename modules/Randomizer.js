@@ -299,7 +299,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
             .push()
             .set({
               info: {
-                champ: shuffled_champions,
+                filterd_champions: filterd_champions,
+                player: element,
                 champs_full,
               },
               time: new Date().getTime(),
