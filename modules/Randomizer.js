@@ -165,7 +165,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
             const temp_champ_list = _.shuffle(filterd_champions);
             const shuffled_champions = temp_champ_list.pop();
 
-            champs_full = temp_champ_list;
+            champs_full = champs_full.filter(x=> x.champion != shuffled_champions.champion);
 
             t.cell("Champion", shuffled_champions.champion);
           } else {
