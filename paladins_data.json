@@ -214,10 +214,6 @@
     {
       "champion": "Zhin",
       "class": "Flank"
-    },
-    {
-      "champion": "",
-      "class": ""
     }
   ],
   "classes": ["Flank", "Damage", "Front Line", "Support"]
