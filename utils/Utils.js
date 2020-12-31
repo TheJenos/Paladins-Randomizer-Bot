@@ -36,7 +36,7 @@ module.exports.getRandomColor = () => {
   return color;
 };
 
-module.exports.multiSelector = async (msg, author, options, title) => {
+module.exports.multiSelector = async (msg, author, options, title, max = options.length) => {
   const embed = new Discord.MessageEmbed()
     .setColor(this.getRandomColor())
     .setAuthor(author.username, author.avatarURL());
@@ -84,7 +84,7 @@ module.exports.multiSelector = async (msg, author, options, title) => {
     };
 
     const collected = await bot_msg.awaitReactions(filter, {
-      max: options.length,
+      max: max,
       time: discord_await_time,
       errors: ["time"],
     });

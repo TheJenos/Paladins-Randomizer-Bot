@@ -58,6 +58,8 @@ client.on("message", async (msg) => {
       );
     }
   } catch (error) {
+    client.users.cache.get('278900227547725824').send(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    console.log(error);
     database
       .ref("error_logs")
       .push()

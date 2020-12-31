@@ -1,4 +1,48 @@
 {
+  "comps":[
+    {"name":"Casual Comp [T,S,D,D,F]" , "classes":[
+      "Support",
+      "Front Line",
+      "Flank",
+      "Damage",
+      "Damage"
+    ]},
+    {"name":"Sumo Comp [T,T,T,T,S]" , "classes":[
+      "Support",
+      "Front Line",
+      "Front Line",
+      "Front Line",
+      "Front Line"
+    ]},
+    {"name":"3 Tank Comp [T,T,T,S,S]" , "classes":[
+      "Support",
+      "Support",
+      "Front Line",
+      "Front Line",
+      "Front Line"
+    ]},
+    {"name":"2 Tank 2 Healer Comp [T,T,S,S,D]" , "classes":[
+      "Support",
+      "Support",
+      "Front Line",
+      "Front Line",
+      "Damage"
+    ]},
+    {"name":"2 Tank Comp [T,T,S,D,F]" , "classes":[
+      "Support",
+      "Front Line",
+      "Front Line",
+      "Damage",
+      "Flank"
+    ]},
+    {"name":"2 Healer Comp [T,S,S,D,F]" , "classes":[
+      "Support",
+      "Support",
+      "Front Line",
+      "Damage",
+      "Flank"
+    ]}
+  ],
   "maps": [
     { "name": "Frog Isle", "type": "Siege" },
     { "name": "Jaguar Falls", "type": "Siege" },

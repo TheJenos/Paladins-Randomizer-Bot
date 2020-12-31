@@ -33,10 +33,12 @@ module.exports = async (discord, msg, main_command, args, database) => {
       )}**`
     );
   } else if (
-    main_command == "randomize-map" ||
     main_command == "randomize" ||
-    main_command == "randomize-champ-map" ||
-    main_command == "randomize-champ"
+    main_command == "randomize-map" ||
+    main_command == "randomize-comp" ||
+    main_command == "randomize-comp-map" ||
+    main_command == "randomize-champ" ||
+    main_command == "randomize-champ-map"
   ) {
     let sellected_voice_channel = msg.member.voice.channel;
 
@@ -66,7 +68,11 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     let map = null;
 
-    if (main_command == "randomize" || main_command == "randomize-champ") {
+    if (
+      main_command == "randomize" ||
+      main_command == "randomize-champ" ||
+      main_command == "randomize-comp"
+    ) {
       map = _.shuffle(
         paladins_data.maps.filter((x) => x.type == "Siege")
       ).pop();
@@ -94,10 +100,6 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     const shuffled_players = _.chunk(_.shuffle(players), player_count / 2);
 
-    let description = `${map.name} (${player_count / 2} vs ${
-      player_count / 2
-    })\n\n`;
-
     let filter_class = paladins_data.classes;
 
     if (
@@ -117,18 +119,66 @@ module.exports = async (discord, msg, main_command, args, database) => {
       }
     }
 
+    let comp = paladins_data.comps[0];
+
+    let comp_name = "Default Comp"
+
+    if (
+      main_command == "randomize-comp" ||
+      main_command == "randomize-comp-map"
+    ) {
+      comp_name = await utils.multiSelector(
+        msg,
+        msg.author,
+        paladins_data.comps.map((x) => x.name),
+        "Please select a comp that you guys like to play",
+        1
+      );
+
+      if (comp_name == null) {
+        msg.reply("You have to pick a comp to continue");
+        return;
+      }
+
+      comp = paladins_data.comps.find((x) => x.name == comp_name);
+
+      if (player_count / 2 > comp.classes.length) {
+        msg.reply(
+          `You must have a maximum of ${comp.classes.length} people on each team`
+        );
+        return;
+      }
+    }
+
+    let description = `${map.name} (${player_count / 2} vs ${
+      player_count / 2
+    })  (${comp_name})\n\n`;
+
     for (const index in shuffled_players) {
       var t = new Table();
 
       description += `Team ${index - -1}` + "\n";
 
-      const champs = _.shuffle(
+      let champs = _.shuffle(
         paladins_data.champions.filter((x) => filter_class.includes(x.class))
       );
 
       let champs_full = _.shuffle(paladins_data.champions);
 
-      for (const element of shuffled_players[index]) {
+      for (const player_index in shuffled_players[index]) {
+        if (
+          main_command == "randomize-comp" ||
+          main_command == "randomize-comp-map"
+        ) {
+          filter_class = [comp.classes[player_index]];
+          champs = _.shuffle(
+            paladins_data.champions.filter(
+              (x) => x.class == comp.classes[player_index]
+            )
+          );
+        }
+
+        const element = shuffled_players[index][player_index];
         if (element.bot == false) {
           t.cell("Player", element.username);
 
@@ -165,7 +215,9 @@ module.exports = async (discord, msg, main_command, args, database) => {
             const temp_champ_list = _.shuffle(filterd_champions);
             const shuffled_champions = temp_champ_list.pop();
 
-            champs_full = champs_full.filter(x=> x.champion != shuffled_champions.champion);
+            champs_full = champs_full.filter(
+              (x) => x.champion != shuffled_champions.champion
+            );
 
             t.cell("Champion", shuffled_champions.champion);
           } else {
@@ -210,6 +262,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
     msg.channel.send("```" + description + "```");
   } else if (
     main_command == "randomize-team" ||
+    main_command == "randomize-team-comp" ||
     main_command == "randomize-team-champ"
   ) {
     let sellected_voice_channel = msg.member.voice.channel;
@@ -234,6 +287,8 @@ module.exports = async (discord, msg, main_command, args, database) => {
       return;
     }
 
+    players = _.shuffle(players)
+
     let filter_class = paladins_data.champions;
 
     if (main_command == "randomize-team-champ") {
@@ -250,16 +305,53 @@ module.exports = async (discord, msg, main_command, args, database) => {
       }
     }
 
+    let comp_name = "Default Comp"
+
+    if (main_command == "randomize-team-comp") {
+      comp_name = await utils.multiSelector(
+        msg,
+        msg.author,
+        paladins_data.comps.map((x) => x.name),
+        "Please select a comp that you guys like to play",
+        1
+      );
+
+      if (comp_name == null) {
+        msg.reply("You have to pick a comp to continue");
+        return;
+      }
+
+      comp = paladins_data.comps.find((x) => x.name == comp_name);
+
+      if (players.length > comp.classes.length) {
+        msg.reply(
+          `You must have a maximum of ${comp.classes.length} people on team`
+        );
+        return;
+      }
+    }
+
     var t = new Table();
 
-    const champs = _.shuffle(
+    let champs = _.shuffle(
       paladins_data.champions.filter((x) => filter_class.includes(x.class))
     );
 
     let champs_full = _.shuffle(paladins_data.champions);
 
-    for (const element of players) {
+    for (const player_index in players) {
+      const element = players[player_index];
+
       t.cell("Player", element.username);
+
+      if (main_command == "randomize-team-comp") {
+        filter_class = [comp.classes[player_index]];
+        champs = _.shuffle(
+          paladins_data.champions.filter(
+            (x) => x.class == comp.classes[player_index]
+          )
+        );
+      }
 
       if (main_command == "randomize-team") {
         let datasnap = (
@@ -291,7 +383,9 @@ module.exports = async (discord, msg, main_command, args, database) => {
         const temp_champ_list = _.shuffle(filterd_champions);
         const shuffled_champions = temp_champ_list.pop();
 
-        champs_full = champs_full.filter(x=> x.champion != shuffled_champions.champion);
+        champs_full = champs_full.filter(
+          (x) => x.champion != shuffled_champions.champion
+        );
 
         t.cell("Champion", shuffled_champions.champion);
       } else {
@@ -313,6 +407,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
       }
       t.newRow();
     }
-    msg.channel.send("```" + t.toString() + "```");
+    
+    msg.channel.send("```"+`${comp_name} \n\n ${t.toString()}` + "```");
   }
 };
