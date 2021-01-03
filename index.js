@@ -56,9 +56,20 @@ client.on("message", async (msg) => {
         args,
         database
       );
+      if (process.env.TEST_MODE) {
+        await require("./modules/Test")(
+          client,
+          msg,
+          main_command.toLowerCase(),
+          args,
+          database
+        );
+      }
     }
   } catch (error) {
-    client.users.cache.get('278900227547725824').send(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    client.users.cache
+      .get("278900227547725824")
+      .send(JSON.stringify(error, Object.getOwnPropertyNames(error)));
     console.log(error);
     database
       .ref("error_logs")

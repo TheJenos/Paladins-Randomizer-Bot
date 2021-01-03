@@ -33,28 +33,17 @@ module.exports = async (discord, msg, main_command, args, database) => {
       )}**`
     );
   } else if (
-    main_command == "randomize" ||
-    main_command == "randomize-map" ||
-    main_command == "randomize-comp" ||
-    main_command == "randomize-comp-map" ||
-    main_command == "randomize-champ" ||
-    main_command == "randomize-champ-map"
+    main_command == "test" ||
+    main_command == "test-map" ||
+    main_command == "test-comp" ||
+    main_command == "test-comp-map" ||
+    main_command == "test-champ" ||
+    main_command == "test-champ-map"
   ) {
-    let sellected_voice_channel = msg.member.voice.channel;
+    let players = [];
 
-    if (sellected_voice_channel == undefined) {
-      msg.reply("Sorry i connot find your voice channel");
-      return;
-    }
-
-    let players = Array.from(sellected_voice_channel.members.values())
-      .map((x) => x.user)
-      .filter((x) => x.bot == false);
-
-    if (msg.mentions.members.size > 0) {
-      players = players.filter(
-        (x) => !Array.from(msg.mentions.members.keys()).includes(x.id)
-      );
+    for (let index = 0; index < 10; index++) {
+      players.push({ username: `bot${index}`, id: index, bot: false });
     }
 
     if (players.length < 1) {
@@ -69,9 +58,9 @@ module.exports = async (discord, msg, main_command, args, database) => {
     let map = null;
 
     if (
-      main_command == "randomize" ||
-      main_command == "randomize-champ" ||
-      main_command == "randomize-comp"
+      main_command == "test" ||
+      main_command == "test-champ" ||
+      main_command == "test-comp"
     ) {
       map = _.shuffle(
         paladins_data.maps.filter((x) => x.type == "Siege")
@@ -102,10 +91,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     let filter_class = paladins_data.classes;
 
-    if (
-      main_command == "randomize-champ" ||
-      main_command == "randomize-champ-map"
-    ) {
+    if (main_command == "test-champ" || main_command == "test-champ-map") {
       filter_class = await utils.multiSelector(
         msg,
         msg.author,
@@ -121,12 +107,9 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     let comp = paladins_data.comps[0];
 
-    let comp_name = "Default Comp"
+    let comp_name = "Default Comp";
 
-    if (
-      main_command == "randomize-comp" ||
-      main_command == "randomize-comp-map"
-    ) {
+    if (main_command == "test-comp" || main_command == "test-comp-map") {
       comp_name = await utils.multiSelector(
         msg,
         msg.author,
@@ -166,15 +149,10 @@ module.exports = async (discord, msg, main_command, args, database) => {
       let champs_full = _.shuffle(paladins_data.champions);
 
       for (const player_index in shuffled_players[index]) {
-        if (
-          main_command == "randomize-comp" ||
-          main_command == "randomize-comp-map"
-        ) {
+        if (main_command == "test-comp" || main_command == "test-comp-map") {
           filter_class = [comp.classes[player_index]];
           champs = _.shuffle(
-            champs_full.filter(
-              (x) => x.class == comp.classes[player_index]
-            )
+            champs_full.filter((x) => x.class == comp.classes[player_index])
           );
         }
 
@@ -182,7 +160,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
         if (element.bot == false) {
           t.cell("Player", element.username);
 
-          if (main_command == "randomize" || main_command == "randomize-map") {
+          if (main_command == "test" || main_command == "test-map") {
             let datasnap = (
               await database
                 .ref("assigned_users")
@@ -219,7 +197,10 @@ module.exports = async (discord, msg, main_command, args, database) => {
               (x) => x.champion != shuffled_champions.champion
             );
 
-            t.cell("Champion", shuffled_champions.champion);
+            t.cell(
+              "Champion",
+              `${shuffled_champions.champion}(${temp_champ_list.length})`
+            );
           } else {
             t.cell(
               "Classes",
@@ -239,7 +220,10 @@ module.exports = async (discord, msg, main_command, args, database) => {
               (x) => x.champion != shuffled_champions.champion
             );
 
-            t.cell("Champion", shuffled_champions.champion);
+            t.cell(
+              "Champion",
+              `${shuffled_champions.champion}(${champs.length})`
+            );
           }
 
           t.newRow();
@@ -265,25 +249,14 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
     msg.channel.send("```" + description + "```");
   } else if (
-    main_command == "randomize-team" ||
-    main_command == "randomize-team-comp" ||
-    main_command == "randomize-team-champ"
+    main_command == "test-team" ||
+    main_command == "test-team-comp" ||
+    main_command == "test-team-champ"
   ) {
-    let sellected_voice_channel = msg.member.voice.channel;
+    let players = [];
 
-    if (sellected_voice_channel == undefined) {
-      msg.reply("Sorry i connot find your voice channel");
-      return;
-    }
-
-    let players = Array.from(sellected_voice_channel.members.values())
-      .map((x) => x.user)
-      .filter((x) => x.bot == false);
-
-    if (msg.mentions.members.size > 0) {
-      players = players.filter(
-        (x) => !Array.from(msg.mentions.members.keys()).includes(x.id)
-      );
+    for (let index = 0; index < 5; index++) {
+      players.push({ username: `bot${index}`, id: index, bot: false });
     }
 
     if (players.length < 1) {
@@ -291,11 +264,11 @@ module.exports = async (discord, msg, main_command, args, database) => {
       return;
     }
 
-    players = _.shuffle(players)
+    players = _.shuffle(players);
 
     let filter_class = paladins_data.champions;
 
-    if (main_command == "randomize-team-champ") {
+    if (main_command == "test-team-champ") {
       filter_class = await utils.multiSelector(
         msg,
         msg.author,
@@ -309,9 +282,9 @@ module.exports = async (discord, msg, main_command, args, database) => {
       }
     }
 
-    let comp_name = "Default Comp"
+    let comp_name = "Default Comp";
 
-    if (main_command == "randomize-team-comp") {
+    if (main_command == "test-team-comp") {
       comp_name = await utils.multiSelector(
         msg,
         msg.author,
@@ -348,16 +321,14 @@ module.exports = async (discord, msg, main_command, args, database) => {
 
       t.cell("Player", element.username);
 
-      if (main_command == "randomize-team-comp") {
+      if (main_command == "test-team-comp") {
         filter_class = [comp.classes[player_index]];
         champs = _.shuffle(
-          champs_full.filter(
-            (x) => x.class == comp.classes[player_index]
-          )
+          champs_full.filter((x) => x.class == comp.classes[player_index])
         );
       }
 
-      if (main_command == "randomize-team") {
+      if (main_command == "test-team") {
         let datasnap = (
           await database.ref("assigned_users").child(element.id).once("value")
         ).val();
@@ -391,7 +362,7 @@ module.exports = async (discord, msg, main_command, args, database) => {
           (x) => x.champion != shuffled_champions.champion
         );
 
-        t.cell("Champion", shuffled_champions.champion);
+        t.cell("Champion", `${shuffled_champions.champion}(${temp_champ_list.length})`);
       } else {
         t.cell(
           "Classes",
@@ -411,11 +382,11 @@ module.exports = async (discord, msg, main_command, args, database) => {
           (x) => x.champion != shuffled_champions.champion
         );
 
-        t.cell("Champion", shuffled_champions.champion);
+        t.cell("Champion", `${shuffled_champions.champion}(${champs.length})`);
       }
       t.newRow();
     }
-    
-    msg.channel.send("```"+`${comp_name} \n\n ${t.toString()}` + "```");
+
+    msg.channel.send("```" + `${comp_name} \n\n ${t.toString()}` + "```");
   }
 };
