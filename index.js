@@ -84,7 +84,7 @@ client.on("message", async (msg) => {
 });
 
 function updateSession() {
-  require('./modules/ServerStatus')(client,database)
+  // require('./modules/ServerStatus')(client,database)
   const rndChamp = _.shuffle(paladins_data.champions).pop();
   const filename = rndChamp.champion
     .toLowerCase()
