@@ -23,6 +23,7 @@
     "easy-table": "^1.1.1",
     "express": "^4.17.1",
     "firebase": "^8.2.1",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "statuspage.io": "^3.0.3"
   }
 }
