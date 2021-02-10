@@ -1,5 +1,5 @@
 const Statuspage = require('statuspage.io').Statuspage
-const statuspage = new Statuspage('stk4xr7r1y0r');
+const statuspage = new Statuspage("stk4xr7r1y0r");
 module.exports = function (discord,database) {
     statuspage.api.getSummary().then(response => {
         const filtered_response = {}
