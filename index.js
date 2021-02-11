@@ -11,6 +11,7 @@ var firebase = require("firebase");
 var _ = require("lodash");
 var http = require("http");
 var fs = require("fs");
+const ServerStatus = require("./modules/ServerStatusListener");
 
 let firebaseConfig = null;
 
@@ -35,6 +36,7 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity(`${bot_starter}help`, { type: "LISTENING" });
   updateSession();
+  serverStatus();
 });
 
 client.on("message", async (msg) => {
@@ -50,6 +52,13 @@ client.on("message", async (msg) => {
         args
       );
       await require("./modules/Randomizer")(
+        client,
+        msg,
+        main_command.toLowerCase(),
+        args,
+        database
+      );
+      await require("./modules/ServerStatusCommand")(
         client,
         msg,
         main_command.toLowerCase(),
@@ -83,8 +92,14 @@ client.on("message", async (msg) => {
   }
 });
 
+function serverStatus() {
+  require('./modules/ServerStatusListener')(client,database)
+  setTimeout(() => {
+    serverStatus();
+  }, 1000 * 60 * 2);
+}
+
 function updateSession() {
-  // require('./modules/ServerStatus')(client,database)
   const rndChamp = _.shuffle(paladins_data.champions).pop();
   const filename = rndChamp.champion
     .toLowerCase()
