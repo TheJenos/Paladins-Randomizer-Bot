@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "firebase": "^8.2.1",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "statuspage.io": "^3.0.3"
   }
 }

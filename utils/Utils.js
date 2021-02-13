@@ -36,6 +36,14 @@ module.exports.getRandomColor = () => {
   return color;
 };
 
+module.exports.capitalizeFirstLetter = (string) => {
+  const words = string.split('_');
+  for (const word_id in words) {
+    words[word_id] = words[word_id].charAt(0).toUpperCase() + words[word_id].slice(1);
+  }
+  return words.join(" ");
+}
+
 module.exports.multiSelector = async (msg, author, options, title, max = options.length) => {
   const embed = new Discord.MessageEmbed()
     .setColor(this.getRandomColor())

@@ -11,7 +11,8 @@ var firebase = require("firebase");
 var _ = require("lodash");
 var http = require("http");
 var fs = require("fs");
-const ServerStatus = require("./modules/ServerStatusListener");
+
+const ServerStatus = require("./modules/ServerStatus");
 
 let firebaseConfig = null;
 
@@ -35,8 +36,8 @@ const database = firebase.database();
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity(`${bot_starter}help`, { type: "LISTENING" });
+  ServerStatus.init(client,database);
   updateSession();
-  serverStatus();
 });
 
 client.on("message", async (msg) => {
@@ -58,7 +59,7 @@ client.on("message", async (msg) => {
         args,
         database
       );
-      await require("./modules/ServerStatusCommand")(
+      await ServerStatus.command(
         client,
         msg,
         main_command.toLowerCase(),
@@ -76,9 +77,8 @@ client.on("message", async (msg) => {
       }
     }
   } catch (error) {
-    client.users.cache
-      .get("278900227547725824")
-      .send(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    const user = await client.users.fetch("278900227547725824").catch(() => null);
+    user.send(JSON.stringify(error,Object.getOwnPropertyNames(error),4));
     console.log(error);
     database
       .ref("error_logs")
@@ -92,22 +92,17 @@ client.on("message", async (msg) => {
   }
 });
 
-function serverStatus() {
-  require('./modules/ServerStatusListener')(client,database)
-  setTimeout(() => {
-    serverStatus();
-  }, 1000 * 60 * 2);
-}
-
 function updateSession() {
   const rndChamp = _.shuffle(paladins_data.champions).pop();
   const filename = rndChamp.champion
     .toLowerCase()
     .replace(" ", "-")
     .replace("'", "");
-  client.user.setAvatar(
-    `https://web2.hirez.com/paladins/champion-icons/${filename}.jpg`
-  );
+  if (!process.env.TEST_MODE) {
+    client.user.setAvatar(
+      `https://web2.hirez.com/paladins/champion-icons/${filename}.jpg`
+    );
+  }
   var options = {
     host: process.env.HOST,
     port: 80,
@@ -132,7 +127,9 @@ app.listen(process.env.PORT || 8080, () => {
   client.login(process.env.DISCORD_TOKEN);
 });
 
-process.on("unhandledRejection", function (error) {
+process.on("unhandledRejection",async function (error) {
+  const user = await client.users.fetch("278900227547725824").catch(() => null);
+  user.send(JSON.stringify(error,Object.getOwnPropertyNames(error),4));
   database
     .ref("error_logs")
     .push()
@@ -144,7 +141,9 @@ process.on("unhandledRejection", function (error) {
     });
 });
 
-process.on("uncaughtException", function (error) {
+process.on("uncaughtException", async function (error) {
+  const user = await client.users.fetch("278900227547725824").catch(() => null);
+  user.send(JSON.stringify(error,Object.getOwnPropertyNames(error),4));
   database
     .ref("error_logs")
     .push()
