@@ -184,6 +184,10 @@
       "class": "Support"
     },
     {
+      "champion": "Octavia",
+      "class": "Damage"
+    },
+    {
       "champion": "Moji",
       "class": "Flank"
     },
@@ -254,6 +258,10 @@
     {
       "champion": "Ying",
       "class": "Support"
+    },
+    {
+      "champion": "Yagorath",
+      "class": "Front Line"
     },
     {
       "champion": "Zhin",
