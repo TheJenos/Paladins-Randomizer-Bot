@@ -94,27 +94,27 @@ client.on("message", async (msg) => {
 
 function updateSession() {
   const rndChamp = _.shuffle(paladins_data.champions).pop();
-  const filename = rndChamp.champion
-    .toLowerCase()
-    .replace(" ", "-")
-    .replace("'", "");
-  if (!process.env.TEST_MODE) {
-    client.user.setAvatar(
-      `https://web2.hirez.com/paladins/champion-icons/${filename}.jpg`
-    );
+  try {
+    const filename = rndChamp.champion.toLowerCase().replace(" ", "-").replace("'", "");
+    if (!process.env.TEST_MODE) {
+      client.user.setAvatar(
+        `https://web2.hirez.com/paladins/champion-icons/${filename}.jpg`
+      );
+    }
+  } catch (error) {
+    console.log(error);
   }
   var options = {
     host: process.env.HOST,
     port: 80,
     path: "/",
   };
-  http
-    .get(options, function (res) {
-      res.on("data", function (chunk) {});
-    })
-    .on("error", function (err) {
-      console.log("Error: " + err.message);
-    });
+  http.get(options, function (res) {
+    res.on("data", function (chunk) {});
+  })
+  .on("error", function (err) {
+    console.log("Error: " + err.message);
+  });
   setTimeout(() => {
     updateSession();
   }, 1000 * 60 * 14);
