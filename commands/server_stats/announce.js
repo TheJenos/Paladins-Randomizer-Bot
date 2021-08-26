@@ -7,7 +7,7 @@ module.exports = class AnnounceCommand extends Command {
 			name: 'announce',
 			group: 'server_stats',
 			memberName: 'announce',
-			description: 'Announce'
+			description: 'Announce paladins server status to a channel'
 		})
 	}
 

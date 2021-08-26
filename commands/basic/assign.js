@@ -15,8 +15,6 @@ module.exports = class AssignCommand extends Command {
 	}
 
 	async run (message) {
-		if (message.channel.type === 'dm') return
-
 		const database = getDatabase()
 
 		let userData = (await get(ref(database, `assigned_users/${message.author.id}`))).val()

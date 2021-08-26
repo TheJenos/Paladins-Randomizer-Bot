@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando')
-const { getDatabase, ref } = require('firebase/database')
+const { getDatabase, ref, remove } = require('firebase/database')
 
 module.exports = class UnannounceCommand extends Command {
 	constructor (client) {
@@ -7,7 +7,7 @@ module.exports = class UnannounceCommand extends Command {
 			name: 'unannounce',
 			group: 'server_stats',
 			memberName: 'unannounce',
-			description: 'Assign to classes that you like to play'
+			description: 'Stop Announcing paladins server status'
 		})
 	}
 
@@ -24,7 +24,7 @@ module.exports = class UnannounceCommand extends Command {
 			return
 		}
 
-		ref(database, `${testPrefix}announce_channels/${channel.id}`).remove()
+		remove(ref(database, `${testPrefix}announce_channels/${channel.id}`))
 		message.reply(`Sure, I will announce everything in #${channel.name}`)
 	}
 }

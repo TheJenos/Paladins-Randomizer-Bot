@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const Statuspage = require('../statuspage.io/dist').Statuspage
 const lodash = require('lodash')
 const moment = require('moment')
+const { ref, get, set, onChildAdded, onChildChanged } = require('firebase/database')
 
 const testPrefix = process.env.TEST_MODE ? 'test_' : ''
 
@@ -33,7 +34,7 @@ const init = function (discord, database) {
 	const maintenance = async function (snapshot) {
 		lastUpdate = new Date().getTime()
 		const updates = snapshot.val()
-		const channelList = (await database.ref(`${testPrefix}announce_channels`).once('value')).val()
+		const channelList = (await get(ref(database, `${testPrefix}announce_channels`))).val()
 		const bodyText = updates.incident_updates[0].body
 		for (const key in channelList) {
 			const channel = await discord.channels.fetch(key)
@@ -50,18 +51,18 @@ const init = function (discord, database) {
 			await channel.send(embed)
 		}
 	}
-	database.ref(`${testPrefix}server_status/scheduled_maintenances`).on('child_added', maintenance)
-	database.ref(`${testPrefix}server_status/scheduled_maintenances`).on('child_changed', maintenance)
-	database.ref(`${testPrefix}server_status/incidents`).on('child_added', maintenance)
-	database.ref(`${testPrefix}server_status/incidents`).on('child_changed', maintenance)
-	database.ref(`${testPrefix}server_status_components`).on('child_changed', async function (snapshot) {
+	onChildAdded(ref(database, `${testPrefix}server_status/scheduled_maintenances`), maintenance)
+	onChildChanged(ref(database, `${testPrefix}server_status/scheduled_maintenances`), maintenance)
+	onChildAdded(ref(database, `${testPrefix}server_status/incidents`), maintenance)
+	onChildChanged(ref(database, `${testPrefix}server_status/incidents`), maintenance)
+	onChildChanged(ref(database, `${testPrefix}server_status_components`), async function (snapshot) {
 		setTimeout(async () => {
 			const currentTime = new Date().getTime()
 			if ((currentTime - lastUpdate) < 10000) {
 				return
 			}
 			const updates = snapshot.val()
-			const channelList = (await database.ref(`${testPrefix}announce_channels`).once('value')).val()
+			const channelList = (await get(ref(database, `${testPrefix}announce_channels`))).val()
 			for (const key in channelList) {
 				const channel = await discord.channels.fetch(key)
 				const embed = createBasicEmbed()
@@ -80,8 +81,8 @@ const listener = async function (discord, database) {
 			const components = response.components.filter(x => x.name.toLowerCase().includes('paladins')).filter(x => !x.group)
 			filteredResponse.scheduled_maintenances = response.scheduled_maintenances.filter(x => x.name.toLowerCase().includes('paladins'))
 			filteredResponse.incidents = response.incidents.filter(x => x.name.toLowerCase().includes('paladins'))
-			database.ref(`${testPrefix}server_status_components/status`).set(components)
-			database.ref(`${testPrefix}server_status`).set(filteredResponse)
+			set(ref(database, `${testPrefix}server_status_components/status`), components)
+			set(ref(database, `${testPrefix}server_status`), filteredResponse)
 		})
 	} catch (error) {
 		console.log(error)
