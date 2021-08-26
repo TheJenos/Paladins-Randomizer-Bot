@@ -200,6 +200,10 @@
       "class": "Front Line"
     },
     {
+      "champion": "Rei",
+      "class": "Support"
+    },
+    {
       "champion": "Ruckus",
       "class": "Front Line"
     },
@@ -238,6 +242,10 @@
     {
       "champion": "Tyra",
       "class": "Damage"
+    },
+    {
+      "champion": "Vatu",
+      "class": "Flank"
     },
     {
       "champion": "Viktor",
