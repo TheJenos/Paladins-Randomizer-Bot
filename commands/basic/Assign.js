@@ -3,7 +3,7 @@ const paladinsData = require('../../paladins_data.json')
 const { selectOption } = require('../../utils/basic')
 const { getDatabase, ref, get, set } = require('firebase/database')
 
-module.exports = class MeowCommand extends Command {
+module.exports = class AssignCommand extends Command {
 	constructor (client) {
 		super(client, {
 			name: 'assign',
