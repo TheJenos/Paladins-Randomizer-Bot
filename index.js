@@ -7,6 +7,9 @@ const sqlite3 = require('sqlite3')
 
 const { initializeApp } = require('firebase/app')
 
+const ServerStatus = require('./utils/server_stats')
+const { getDatabase } = require('firebase/database')
+
 let firebaseConfig = null
 
 if (process.env.FIREBASE) {
@@ -44,7 +47,7 @@ client.registry
 	.registerGroups([
 		['basic', 'Basic Commands To Setup'],
 		['randomize', 'Get Random Paladins Champion'],
-		['server_stats', 'Update Paladins Server Stats']
+		['server_stats', 'Paladins Server Stats Updates']
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands()
@@ -53,6 +56,9 @@ client.registry
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`)
 	client.user.setActivity(`${process.env.BOT_STARTER}help`, { type: 'LISTENING' })
+
+	const database = getDatabase()
+	ServerStatus.init(client, database)
 })
 
 client.on('error', console.error)
