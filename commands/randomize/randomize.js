@@ -3,14 +3,14 @@ const paladinsData = require('../../paladins_data.json')
 const { selectOption } = require('../../utils/basic')
 const { getDatabase, ref, get, set } = require('firebase/database')
 
-module.exports = class MeowCommand extends Command {
+module.exports = class RandomizeCommand extends Command {
 	constructor (client) {
 		super(client, {
 			name: 'randomize',
 			aliases: ['rando'],
-			group: 'basic',
+			group: 'randomize',
 			memberName: 'randomize',
-			description: 'Assign to classes that you like to play'
+			description: 'Randomize the map(Siege) and champions of custom matches'
 		})
 	}
 
