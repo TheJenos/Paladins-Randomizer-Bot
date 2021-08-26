@@ -2,3 +2,4 @@ node_modules/
 .env
 Avatar.png
 firebaseConfig.json
+database.db

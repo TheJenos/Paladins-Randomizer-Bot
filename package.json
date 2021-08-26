@@ -3,6 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "discord-buttons": "^4.0.0",
+    "discord.js": "^12.5.3",
+    "discord.js-commando": "^0.12.3",
+    "dotenv": "^10.0.0",
+    "firebase": "^9.0.0",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^1.7.0"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,15 +36,5 @@
   "bugs": {
     "url": "https://github.com/TheJenos/Paladins-Randomizer-Bot/issues"
   },
-  "homepage": "https://github.com/TheJenos/Paladins-Randomizer-Bot#readme",
-  "dependencies": {
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "easy-table": "^1.1.1",
-    "express": "^4.17.1",
-    "firebase": "^8.2.1",
-    "lodash": "^4.17.20",
-    "moment": "^2.29.1",
-    "statuspage.io": "^3.0.3"
-  }
+  "homepage": "https://github.com/TheJenos/Paladins-Randomizer-Bot#readme"
 }
