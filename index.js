@@ -30,10 +30,8 @@ initializeApp(firebaseConfig)
 
 const client = new CommandoClient({
 	commandPrefix: process.env.BOT_STARTER,
-	unknownCommandResponse: false,
 	owner: '278900227547725824',
-	invite: 'https://discord.gg/bnaHK7PdSF',
-	disableEveryone: true
+	invite: 'https://discord.gg/bnaHK7PdSF'
 })
 
 require('discord-buttons')(client)
@@ -45,12 +43,14 @@ client.setProvider(
 client.registry
 	.registerDefaultTypes()
 	.registerGroups([
-		['basic', 'Basic Commands To Setup'],
-		['randomize', 'Get Random Paladins Champion'],
+		['randomize', 'Get Random Paladins Things'],
 		['server_stats', 'Paladins Server Stats Updates']
 	])
 	.registerDefaultGroups()
-	.registerDefaultCommands()
+	.registerDefaultCommands({
+		prefix: false,
+		eval: false
+	})
 	.registerCommandsIn(path.join(__dirname, 'commands'))
 
 client.on('ready', () => {
@@ -59,7 +59,24 @@ client.on('ready', () => {
 
 	const database = getDatabase()
 	ServerStatus.init(client, database)
+
+	updateSession()
 })
+
+function updateSession () {
+	const rndChamp = require('lodash').shuffle(require('./paladins_data.json').champions).pop()
+	try {
+		const filename = rndChamp.champion.toLowerCase().replace(' ', '-').replace("'", '')
+		if (!process.env.TEST_MODE) {
+			client.user.setAvatar(`https://web2.hirez.com/paladins/champion-icons/${filename}.jpg`)
+		}
+	} catch (error) {
+		console.log(error)
+	}
+	setTimeout(() => {
+		updateSession()
+	}, 1000 * 60 * 30)
+}
 
 client.on('error', console.error)
 
