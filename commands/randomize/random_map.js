@@ -8,7 +8,7 @@ module.exports = class AssignCommand extends Command {
 		super(client, {
 			name: 'random_map',
 			aliases: ['rndmap'],
-			group: 'basic',
+			group: 'randomize',
 			memberName: 'random_map',
 			description: 'Give a random Map'
 		})

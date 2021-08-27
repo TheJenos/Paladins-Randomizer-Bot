@@ -8,7 +8,7 @@ module.exports = class AssignCommand extends Command {
 		super(client, {
 			name: 'assign',
 			aliases: ['my'],
-			group: 'basic',
+			group: 'randomize',
 			memberName: 'assign',
 			description: 'Assign to classes that you like to play'
 		})
