@@ -81,3 +81,11 @@ function updateSession () {
 client.on('error', console.error)
 
 client.login(process.env.DISCORD_TOKEN)
+
+process.on('unhandledRejection', async function (error) {
+	console.error(error)
+})
+
+process.on('uncaughtException', async function (error) {
+	console.error(error)
+})
