@@ -88,8 +88,16 @@
       "class": "Front Line"
     },
     {
+      "champion": "Azzan",
+      "class": "Front Line"
+    },
+    {
       "champion": "Barik",
       "class": "Front Line"
+    },
+    {
+      "champion": "BettyLaBomba",
+      "class": "Damage"
     },
     {
       "champion": "BombKing",
@@ -172,6 +180,10 @@
       "class": "Damage"
     },
     {
+      "champion": "Lillith",
+      "class": "Support"
+    },
+    {
       "champion": "Maeve",
       "class": "Flank"
     },
@@ -206,6 +218,10 @@
     {
       "champion": "Ruckus",
       "class": "Front Line"
+    },
+    {
+      "champion": "Saati",
+      "class": "Damage"
     },
     {
       "champion": "Seris",
@@ -245,6 +261,10 @@
     },
     {
       "champion": "Vatu",
+      "class": "Flank"
+    },
+    {
+      "champion": "VLL",
       "class": "Flank"
     },
     {
